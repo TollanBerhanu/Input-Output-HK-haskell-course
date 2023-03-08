@@ -19,7 +19,11 @@ Define an IO action that counts the number of files in the current directory
 and prints it to the terminal inside a string message.
 -}
 
--- listFiles :: IO ()
+listFiles :: IO ()
+listFiles = do
+              dirs <- listDirectory "."
+              let noDir = length dirs
+              putStrLn $ "Number of directories: " ++ show noDir
 
 {-
 -- Question 2 --
@@ -28,8 +32,14 @@ to a file called msg.txt, and after that, it reads the text from the msg.txt
 file and prints it back. Use the writeFile and readFile functions.
 -}
 
--- createMsg :: IO ()
-
+createMsg :: IO ()
+createMsg = do 
+              putStrLn "Write a message..."
+              msg <- getLine
+              let fileName = "./Homework/Homework11/msg1.txt"
+              writeFile fileName msg
+              savedMsg <- readFile fileName
+              putStrLn savedMsg
 
 {-
 -- Context for Questions 3 and 4 --
@@ -70,8 +80,12 @@ Use the getCPUTime :: IO Integer function to get the CPU time before and after t
 The CPU time here is given in picoseconds (which is 1/1000000000000th of a second).
 -}
 
--- timeIO :: IO a -> IO ()
-
+timeIO :: IO a -> IO ()
+timeIO ioAction = do 
+                    before <- getCPUTime
+                    ioAction
+                    after <- getCPUTime
+                    putStrLn $ show (before - after)
 
 {-
 -- Question 4 --
@@ -80,7 +94,22 @@ and compares the time all three algorithms take to produce the largest prime bef
 limit. Print the number and time to the standard output.
 -}
 
--- benchmark :: IO ()
+benchmark :: IO ()
+benchmark = do
+              putStrLn "Enter a limit to calculate primes..."
+              limit <- getLine
+              before <- getCPUTime
+              let lim = read limit
+                  algo1 = primes1 lim
+              afterAlgo1 <- getCPUTime
+              let algo2 = primes2 lim
+              afterAlgo2 <- getCPUTime
+              let algo3 = primes2 lim
+              afterAlgo3 <- getCPUTime
+              
+              putStrLn $ show (before - afterAlgo1)
+              putStrLn $ show (before - afterAlgo2)
+              putStrLn $ show (before - afterAlgo3)
 
 {-
  -- Question 5 -- EXTRA CREDITS -- (In case the previous ones were too easy)
