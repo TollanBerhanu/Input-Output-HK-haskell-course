@@ -21,9 +21,9 @@ and prints it to the terminal inside a string message.
 
 listFiles :: IO ()
 listFiles = do
-              dirs <- listDirectory "."
-              let noDir = length dirs
-              putStrLn $ "Number of directories: " ++ show noDir
+    dirs <- listDirectory "."
+    let noDir = length dirs
+    putStrLn $ "Number of directories: " ++ show noDir
 
 {-
 -- Question 2 --
@@ -34,12 +34,12 @@ file and prints it back. Use the writeFile and readFile functions.
 
 createMsg :: IO ()
 createMsg = do 
-              putStrLn "Write a message..."
-              msg <- getLine
-              let fileName = "./Homework/Homework11/msg1.txt"
-              writeFile fileName msg
-              savedMsg <- readFile fileName
-              putStrLn savedMsg
+    putStrLn "Write a message..."
+    msg <- getLine
+    let fileName = "./Homework/Homework11/msg.txt"
+    writeFile fileName msg
+    savedMsg <- readFile fileName
+    putStrLn savedMsg
 
 {-
 -- Context for Questions 3 and 4 --
@@ -82,10 +82,11 @@ The CPU time here is given in picoseconds (which is 1/1000000000000th of a secon
 
 timeIO :: IO a -> IO ()
 timeIO ioAction = do 
-                    before <- getCPUTime
-                    ioAction
-                    after <- getCPUTime
-                    putStrLn $ show (before - after)
+    before <- getCPUTime
+    ioAction
+    after <- getCPUTime
+    let timeTaken = fromIntegral (after - before) / 1000000000000
+    putStrLn $ "Time Taken: " ++( show timeTaken) 
 
 {-
 -- Question 4 --
@@ -96,21 +97,14 @@ limit. Print the number and time to the standard output.
 
 benchmark :: IO ()
 benchmark = do
-              putStrLn "Enter a limit to calculate primes..."
-              limit <- getLine
-              before <- getCPUTime
-              let lim = read limit
-                  algo1 = primes1 lim
-              afterAlgo1 <- getCPUTime
-              let algo2 = primes2 lim
-              afterAlgo2 <- getCPUTime
-              let algo3 = primes2 lim
-              afterAlgo3 <- getCPUTime
-              
-              putStrLn $ show (before - afterAlgo1)
-              putStrLn $ show (before - afterAlgo2)
-              putStrLn $ show (before - afterAlgo3)
-
+    putStrLn "Enter a limit to calculate primes..."
+    limit <- getLine
+    before <- getCPUTime
+    let lim = read limit :: Integer
+    timeIO $ primes1 lim
+    timeIO $ primes2 lim
+    timeIO $ primes3 lim
+    timeAndShow f n = timeIO . print . last $ f n
 {-
  -- Question 5 -- EXTRA CREDITS -- (In case the previous ones were too easy)
 Write a program that prints the directory tree structure from the current folder.
